@@ -1,4 +1,59 @@
 import styled from "styled-components";
+import React from "react";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux"
+import { addTodo } from "./redux/modules/todos";
+
+function App() {
+  const [title, setTitle] = useState('')
+
+  const onChangeHandler = (e) => {
+    const { value } = e.target
+    setTitle(value)
+  }
+
+  // const addStore = useSelector((state) => state)
+  // console.log('store조회', addStore) //store가 잘 연결되었는지 확인
+
+  // dispatch 함수 선언
+  const dispatch = useDispatch()
+
+  // state값 확인하기
+  const todos = useSelector((state) => state.addTodo.todos)
+  console.log('todos', todos)
+
+  // 추가하기 버튼 눌렀을 때
+  const addTodoBtnHandler = () => {
+    if(title === '') return alert('Todos의 제목을 입력하세요')
+
+    dispatch(addTodo(
+      {
+        id: todos.length + 1,
+        title
+      }
+    ))
+  }
+
+  return (
+    <>
+      <StHeader>
+        <StHeaderSpan>Todos의 제목을 입력하세요</StHeaderSpan>
+        <StHeaderInput type="text"
+          onChange={onChangeHandler} />
+        <StHeaderBtn onClick={addTodoBtnHandler}>추가하기</StHeaderBtn>
+      </StHeader>
+
+      <StBody>
+        {todos.map((todo) => (
+          <StBodyTodo key={todo.id}>{todo.title}</StBodyTodo>
+        ))}
+      </StBody>
+    </>
+
+  );
+}
+
+export default App;
 
 // styled-components
 const StHeader = styled.div`
@@ -43,23 +98,3 @@ const StBodyTodo = styled.div`
   box-sizing: border-box;
   padding: 10px;
 `
-
-function App() {
-  return (
-    <>
-      <StHeader>
-        <StHeaderSpan>Todos의 제목을 입력하세요</StHeaderSpan>
-        <StHeaderInput type="text" />
-        <StHeaderBtn>추가하기</StHeaderBtn>
-      </StHeader>
-
-      <StBody>
-        <StBodyTodo>react를 배워봅시다</StBodyTodo>
-        <StBodyTodo>redux를 배워봅시다</StBodyTodo>
-      </StBody>
-    </>
-
-  );
-}
-
-export default App;
