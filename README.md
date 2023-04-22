@@ -1,5 +1,5 @@
 ## TodoList (Redux ver)
-[프로젝트 사이트로 이동](https://redux-todo-list-saemmm.vercel.app/)
+👉 [프로젝트 사이트로 이동](https://redux-todo-list-saemmm.vercel.app/)
 ***
 ### 📊 프로젝트 설명
 
