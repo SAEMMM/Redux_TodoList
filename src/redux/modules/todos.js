@@ -69,7 +69,7 @@ const todos = (state = initialState, action) => {
         case DEL_TODO:
             return {
                 ...state,
-                todos: state.todos.filter(todos => todos.id !== action.payload)
+                todos: state.todos.filter((todo) => todo.id !== action.payload)
             }
         default:
             return state
