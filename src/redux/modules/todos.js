@@ -56,7 +56,7 @@ const todos = (state = initialState, action) => {
             return {
                 ...state,
                 todos: state.todos.map((todo) => {
-                    if (todos.id === action.payload) {
+                    if (todo.id === action.payload) {
                         return {
                             ...todo,
                             done: !todo.done
