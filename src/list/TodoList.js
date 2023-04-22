@@ -64,7 +64,8 @@ function TodoList() {
 }
 
 const StBody = styled.div`
-  
+  margin: auto;
+  width: 1200px;
 `
 
 const StBodyTodo = styled.div`

@@ -40,7 +40,12 @@ const StDetailHeaderP = styled.p`
 
 const StDetailHeaderBtn = styled.button`
   float: right;
+  width: 120px;
+  height: 35px;
+  border: 2px solid DarkGrey;
+  border-radius: 5px;
 `
+
 const StFloatNone = styled.div`
   clear: both;
 `
