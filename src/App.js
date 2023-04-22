@@ -3,21 +3,12 @@ import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { addTodo, doneTodo, delTodo } from "./redux/modules/todos";
+import { Routes, Route, Link } from 'react-router-dom'
+import { useParams } from "react-router-dom"
 
 function App() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
-
-  // input 내보내주기
-  const onChangeTitleHandler = (e) => {
-    const { value } = e.target
-    setTitle(value)
-  }
-
-  const onChangeContentHandler = (e) => {
-    const { value } = e.target
-    setContent(value)
-  }
 
   // const addStore = useSelector((state) => state)
   // console.log('store조회', addStore) //store가 잘 연결되었는지 확인
@@ -29,30 +20,68 @@ function App() {
   const todos = useSelector((state) => state.addTodo.todos)
   console.log('todos', todos)
 
+  let { id } = useParams()
+
+  return (
+    <>
+      <Routes>
+        <Route path="/"
+          element={
+            <>
+              <MainHeader todos={todos} title={title} setTitle={setTitle}
+                content={content} setContent={setContent} dispatch={dispatch} />
+              <MainBody todos={todos} dispatch={dispatch} />
+            </>} />
+        <Route path="/detail/:id" element={<Detail todos={todos} />} />
+      </Routes>
+    </>
+  );
+}
+
+export default App;
+
+function Detail(props) {
+  let { id } = useParams()
+  let todo = props.todos.find((item) => {
+    return item.id === parseInt(id)
+  })
+
+  return (
+    <StDetail>
+      <StDetailHeaderP>ID : {todo.id}</StDetailHeaderP>
+      <StDetailHeaderBtn><Link to="/">이전으로</Link></StDetailHeaderBtn>
+      <StFloatNone />
+      <h2>{todo.title}</h2>
+      <p>{todo.content}</p>
+    </StDetail>
+  )
+}
+
+function MainHeader(props) {
+  // input 내보내주기
+  const onChangeTitleHandler = (e) => {
+    const { value } = e.target
+    props.setTitle(value)
+  }
+
+  const onChangeContentHandler = (e) => {
+    const { value } = e.target
+    props.setContent(value)
+  }
+
   // 추가하기 버튼 눌렀을 때
   const addTodoBtnHandler = () => {
-    if (title === '') return alert('Todos의 제목을 입력하세요')
+    if (props.title === '' || props.content === '') return alert('Todos를 입력하세요')
 
-    dispatch(addTodo(
+    props.dispatch(addTodo(
       {
-        id: todos.length + 1,
-        title,
-        content,
+        id: props.todos.length + 1,
+        title: props.title,
+        content: props.content,
         done: false
       }
     ))
   }
-
-  // 삭제하기 버튼 눌렀을 때
-  const delTodoBtnHandler = (id) => {
-    dispatch(delTodo(id))
-  }
-
-  // 완료 버튼 눌렀을 때
-  const doneTodoBtnHandler = (id) => {
-    dispatch(doneTodo(id))
-  }
-
   return (
     <>
       <StHeader>
@@ -65,49 +94,61 @@ function App() {
           onChange={onChangeContentHandler} />
         <StHeaderBtn onClick={addTodoBtnHandler}>추가하기</StHeaderBtn>
       </StInputBox>
-
-      <StBody>
-        <StBodyWorking>Working.. 🔥</StBodyWorking>
-        {todos.map((todo) => {
-          if (!todo.done) {
-            return (
-              <StBodyTodo key={todo.id}>
-                <h3>{todo.title}</h3>
-                <p>{todo.content}</p>
-                <StBodyBtnDiv>
-                  <StBodyBtn onClick={() => delTodoBtnHandler(todo.id)} bg='IndianRed'>삭제하기</StBodyBtn>
-                  <StBodyBtn onClick={() => doneTodoBtnHandler(todo.id)} bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
-                    {todo.done === true ? '다시하기' : '완료'}</StBodyBtn>
-                </StBodyBtnDiv>
-              </StBodyTodo>)
-          } else {
-            return null
-          }
-        })}
-        <StBodyDone>Done!! 🍀</StBodyDone>
-        {todos.map((todo) => {
-          if (todo.done) {
-            return (
-              <StBodyTodo key={todo.id}>
-                <h3>{todo.title}</h3>
-                <p>{todo.content}</p>
-                <StBodyBtnDiv>
-                  <StBodyBtn onClick={() => delTodoBtnHandler(todo.id)} bg='IndianRed'>삭제하기</StBodyBtn>
-                  <StBodyBtn onClick={() => doneTodoBtnHandler(todo.id)} bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
-                    {todo.done === true ? '다시하기' : '완료'}</StBodyBtn>
-                </StBodyBtnDiv>
-              </StBodyTodo>)
-          } else {
-            return null
-          }
-        })}
-      </StBody>
     </>
-
-  );
+  )
 }
 
-export default App;
+function MainBody(props) {
+  // 삭제하기 버튼 눌렀을 때
+  const delTodoBtnHandler = (id) => {
+    props.dispatch(delTodo(id))
+  }
+
+  // 완료 버튼 눌렀을 때
+  const doneTodoBtnHandler = (id) => {
+    props.dispatch(doneTodo(id))
+  }
+  return (
+    <StBody>
+      <StBodyWorking>Working.. 🔥</StBodyWorking>
+      {props.todos.map((todo) => {
+        if (!todo.done) {
+          return (
+            <StBodyTodo key={todo.id}>
+              <Link to={`/detail/${todo.id}`}>상세보기</Link>
+              <h3>{todo.title}</h3>
+              <p>{todo.content}</p>
+              <StBodyBtnDiv>
+                <StBodyBtn onClick={() => delTodoBtnHandler(todo.id)} bg='IndianRed'>삭제하기</StBodyBtn>
+                <StBodyBtn onClick={() => doneTodoBtnHandler(todo.id)} bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
+                  {todo.done === true ? '다시하기' : '완료'}</StBodyBtn>
+              </StBodyBtnDiv>
+            </StBodyTodo>)
+        } else {
+          return null
+        }
+      })}
+      <StBodyDone>Done!! 🍀</StBodyDone>
+      {props.todos.map((todo) => {
+        if (todo.done) {
+          return (
+            <StBodyTodo key={todo.id}>
+              <Link to={`/detail/${todo.id}`}>상세보기</Link>
+              <h3>{todo.title}</h3>
+              <p>{todo.content}</p>
+              <StBodyBtnDiv>
+                <StBodyBtn onClick={() => delTodoBtnHandler(todo.id)} bg='IndianRed'>삭제하기</StBodyBtn>
+                <StBodyBtn onClick={() => doneTodoBtnHandler(todo.id)} bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
+                  {todo.done === true ? '다시하기' : '완료'}</StBodyBtn>
+              </StBodyBtnDiv>
+            </StBodyTodo>)
+        } else {
+          return null
+        }
+      })}
+    </StBody>
+  )
+}
 
 // styled-components
 const StHeader = styled.div`
@@ -190,5 +231,26 @@ const StBodyWorking = styled.h2`
 
 const StBodyDone = styled.h2`
   margin-left: 20px;
+  clear: both;
+`
+
+const StDetail = styled.div`
+  box-sizing: border-box;
+  margin: auto;
+  width:600px;
+  height: 400px;
+  padding: 20px;
+  border: 2px solid Gainsboro;
+  border-radius: 10px;
+`
+
+const StDetailHeaderP = styled.p`
+  float: left;
+`
+
+const StDetailHeaderBtn = styled.button`
+  float: right;
+`
+const StFloatNone = styled.div`
   clear: both;
 `
