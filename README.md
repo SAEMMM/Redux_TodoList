@@ -1,4 +1,4 @@
-## <span style='background-color:black; color:white'>TodoList (Redux ver)
+## TodoList (Redux ver)
 ***
 ### 📊 프로젝트 설명
 
