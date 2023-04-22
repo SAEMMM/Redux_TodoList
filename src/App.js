@@ -93,7 +93,7 @@ function App() {
                 <p>{todo.content}</p>
                 <StBodyBtnDiv>
                   <StBodyBtn onClick={() => delTodoBtnHandler(todo.id)} bg='IndianRed'>삭제하기</StBodyBtn>
-                  <StBodyBtn bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
+                  <StBodyBtn onClick={() => doneTodoBtnHandler(todo.id)} bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
                     {todo.done === true ? '다시하기' : '완료'}</StBodyBtn>
                 </StBodyBtnDiv>
               </StBodyTodo>)
