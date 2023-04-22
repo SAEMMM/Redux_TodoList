@@ -13,13 +13,11 @@ function TodoInput() {
 
     // input 내보내주기
     const onChangeTitleHandler = (e) => {
-        const { value } = e.target
-        setTitle(value)
+        setTitle(e.target.value)
     }
 
     const onChangeContentHandler = (e) => {
-        const { value } = e.target
-        setContent(value)
+        setContent(e.target.value)
     }
 
     // 추가하기 버튼 눌렀을 때
@@ -34,6 +32,8 @@ function TodoInput() {
                 done: false
             }
         ))
+        setTitle('')
+        setContent('')
     }
     return (
         <>
@@ -41,9 +41,9 @@ function TodoInput() {
                 <StHeaderTitle>My TodoList</StHeaderTitle>
             </StHeader>
             <StInputBox>
-                제목<StHeaderInputTitle type="text"
+                제목<StHeaderInputTitle type="text" value={title}
                     onChange={onChangeTitleHandler} />
-                내용<StHeaderInputContent type="text"
+                내용<StHeaderInputContent type="text" value={content}
                     onChange={onChangeContentHandler} />
                 <StHeaderBtn onClick={addTodoBtnHandler}>추가하기</StHeaderBtn>
             </StInputBox>
@@ -52,7 +52,9 @@ function TodoInput() {
 }
 
 const StHeader = styled.div`
+width: 1200px;
 height: 100px;
+margin: auto;
 margin-top: 10px;
 text-align: center;
 background-color: SlateGrey;
@@ -85,9 +87,10 @@ border: 2px solid Gainsboro;
 margin-left: 10px;
 `
 
+
 const StHeaderBtn = styled.button`
 width: 100px;
-height: 35px;
+height: 40px;
 border-radius: 10px;
 border: none;
 margin-left: 10px;
