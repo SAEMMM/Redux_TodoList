@@ -1,5 +1,7 @@
 // action creator (액션객체를 한 곳에서 관리)
 const ADD_TODO = 'ADD_TODO'
+const DONE_TODO = 'DONE_TODO'
+const DEL_TODO = 'DEL_TODO'
 
 // payload : 액션 객체에 담아주는 '목적'
 export const addTodo = (payload) => {
@@ -9,12 +11,26 @@ export const addTodo = (payload) => {
     }
 }
 
+export const doneTodo = (payload) => {
+    return {
+        type: DONE_TODO,
+        payload
+    }
+}
+
+export const delTodo = (payload) => {
+    return {
+        type: DEL_TODO,
+        payload
+    }
+}
+
 // 초기 상태값 (useState와 같음)
 const initialState = {
     todos: [
         {
             id: 1,
-            title: 'react를 배워봅시다', 
+            title: 'react를 배워봅시다',
             content: 'react 기초를 공부해봅시다',
             done: false,
         },
@@ -35,6 +51,25 @@ const todos = (state = initialState, action) => {
             return {
                 ...state,
                 todos: [...state.todos, action.payload]
+            }
+        case DONE_TODO:
+            return {
+                ...state,
+                todos: state.todos.map((todo) => {
+                    if (todos.id === action.payload) {
+                        return {
+                            ...todo,
+                            done: !todo.done
+                        }
+                    } else {
+                        return todo
+                    }
+                })
+            }
+        case DEL_TODO:
+            return {
+                ...state,
+                todos: state.todos.filter(todos => todos.id !== action.payload)
             }
         default:
             return state

@@ -2,12 +2,13 @@ import styled from "styled-components";
 import React from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
-import { addTodo } from "./redux/modules/todos";
+import { addTodo, doneTodo, delTodo } from "./redux/modules/todos";
 
 function App() {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
 
+  // input 내보내주기
   const onChangeTitleHandler = (e) => {
     const { value } = e.target
     setTitle(value)
@@ -34,12 +35,22 @@ function App() {
 
     dispatch(addTodo(
       {
-        id: Math.random(),
+        id: todos.length + 1,
         title,
         content,
         done: false
       }
     ))
+  }
+
+  // 삭제하기 버튼 눌렀을 때
+  const delTodoBtnHandler = (id) => {
+    dispatch(delTodo(id))
+  }
+
+  // 완료 버튼 눌렀을 때
+  const doneTodoBtnHandler = (id) => {
+    dispatch(doneTodo(id))
   }
 
   return (
@@ -57,18 +68,39 @@ function App() {
 
       <StBody>
         <StBodyWorking>Working.. 🔥</StBodyWorking>
-        {todos.map((todo) => (
-          <StBodyTodo key={todo.id}>
-            <h3>{todo.title}</h3>
-            <p>{todo.content}</p>
-            <StBodyBtnDiv>
-              <StBodyBtn bg='IndianRed'>삭제하기</StBodyBtn>
-              <StBodyBtn bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
-                {todo.done === true ? '다시하기' : '완료'}</StBodyBtn>
-            </StBodyBtnDiv>
-          </StBodyTodo>
-        ))}
+        {todos.map((todo) => {
+          if (!todo.done) {
+            return (
+              <StBodyTodo key={todo.id}>
+                <h3>{todo.title}</h3>
+                <p>{todo.content}</p>
+                <StBodyBtnDiv>
+                  <StBodyBtn onClick={() => delTodoBtnHandler(todo.id)} bg='IndianRed'>삭제하기</StBodyBtn>
+                  <StBodyBtn onClick={() => doneTodoBtnHandler(todo.id)} bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
+                    {todo.done === true ? '다시하기' : '완료'}</StBodyBtn>
+                </StBodyBtnDiv>
+              </StBodyTodo>)
+          } else {
+            return null
+          }
+        })}
         <StBodyDone>Done!! 🍀</StBodyDone>
+        {todos.map((todo) => {
+          if (todo.done) {
+            return (
+              <StBodyTodo key={todo.id}>
+                <h3>{todo.title}</h3>
+                <p>{todo.content}</p>
+                <StBodyBtnDiv>
+                  <StBodyBtn onClick={() => delTodoBtnHandler(todo.id)} bg='IndianRed'>삭제하기</StBodyBtn>
+                  <StBodyBtn bg={todo.done === true ? 'CornflowerBlue' : 'MediumSeaGreen'}>
+                    {todo.done === true ? '다시하기' : '완료'}</StBodyBtn>
+                </StBodyBtnDiv>
+              </StBodyTodo>)
+          } else {
+            return null
+          }
+        })}
       </StBody>
     </>
 
