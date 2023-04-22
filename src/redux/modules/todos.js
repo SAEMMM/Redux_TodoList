@@ -14,11 +14,15 @@ const initialState = {
     todos: [
         {
             id: 1,
-            title: 'react를 배워봅시다',   
+            title: 'react를 배워봅시다', 
+            content: 'react 기초를 공부해봅시다',
+            done: false,
         },
         {
             id: 2,
-            title: 'redux를 배워봅시다',   
+            title: 'redux를 배워봅시다',
+            content: 'redux 기초를 공부해봅시다',
+            done: true,
         },
     ],
 }
