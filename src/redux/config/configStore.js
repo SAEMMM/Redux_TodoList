@@ -1,7 +1,6 @@
 // 중앙 state 관리소인 Store를 만드는 설정 코드들이 있는 파일
 import { createStore } from "redux";
 import { combineReducers } from "redux";
-import { addTodo, doneTodo, delTodo } from "../modules/todos";
 import todos from "../modules/todos";
 
 /*
@@ -19,9 +18,6 @@ combineReducers은 여러 개의 독립적인 reducer의 반환 값을 하나의
 */
 
 const rootReducer = combineReducers({
-    addTodo: addTodo,
-    doneTodo: doneTodo,
-    delTodo: delTodo,
     todos
 }); 
 const store = createStore(rootReducer); 
